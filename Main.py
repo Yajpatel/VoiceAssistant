@@ -1,10 +1,13 @@
 import speech_recognition as sr
 import pyttsx3 as tts
 import pywhatkit as yt
-import datetime as t
+import datetime
 import wikipedia as book
 import time
 from Pdfreader import reader
+
+import os
+import pyautogui #for play pause mute   
 # import requests
 # from bs4 import BeautifulSoup
 
@@ -16,9 +19,9 @@ engine = tts.init()
 
 voices = engine.getProperty('voices')
 engine.setProperty('voice',voices[1].id)
-engine.setProperty('rate',130) # Slow down speech default is 200
-engine.say("hello")
-engine.runAndWait()
+engine.setProperty('rate',150) # Slow down speech default is 200
+# engine.say("hello")
+# engine.runAndWait()
 ##### Flag to check if it's the first time running
 first_run = True
 
@@ -64,25 +67,58 @@ def run_alexa():
                 print("I am Personal Voice Assistant coded by Yaj")
             elif "what is your gender" in command or "are you male or female" in command:
                 pass
+            elif "open" in command:
+                command = command.replace('open', "").strip()
+                pyautogui.press('super')
+                time.sleep(1)
+                pyautogui.typewrite(command)
+                time.sleep(2)
+                pyautogui.press('enter')
             elif "youtube" in command:
                 command = command.replace('youtube', "").strip()
                 command = command.replace('play', "").strip()
                 command = command.replace('search',"").strip()
-                command = command.replace('on', "").strip()
+                command = command.replace(' on ', "").strip()
                 talk("Searching for..." + command)
                 yt.playonyt(command)
                 
-                input("press Enter to continue..")
+                
+                # input("press Enter to continue..")
             elif "google" in command:
                 command = command.replace('on google',"").strip()
                 command = command.replace('google',"").strip()
                 command = command.replace('search',"").strip()
                 command = command.replace('on', "").strip()
                 yt.search(command)
+            elif "whatsapp" in command:
+                try:
+                    phone_number = input("enter Time with starting with +91 than 10 digits:")  # Replace with recipient's number
+                    message = input("enter message you want to send")
+                    target_time = input("Enter time to send message in HH:MM format: ")
+                    print("your message will be sent at ",target_time)
+                    
+                    while True:
+                        current_time = datetime.datetime.now().strftime("%H:%M")
+                        if current_time == target_time:
+                            os.system("start whatsapp://send?phone=" + phone_number)
 
-                input("press Enter to continue..")
+                            # Wait for WhatsApp to open
+                            time.sleep(5)
+
+                            # Type the message
+                            pyautogui.write(message)
+
+                            time.sleep(2)
+                            # Press 'Enter' to send
+                            pyautogui.press("enter")
+                            break
+                        time.sleep(1)
+                except Exception as e:
+                    print("msg not send ",e)
+                
+                
             elif 'time' in command:
-                currtime = t.datetime.now().strftime('%I:%M %p')
+                currtime = datetime.datetime.now().strftime('%I:%M %p')
                 talk(currtime)
                 print(currtime)
             elif 'who is' in command:
@@ -101,13 +137,10 @@ def run_alexa():
                 info = book.summary(command, 1)
                 print(info)
                 talk(info)
-            elif "set" in command or "set alaram" in command:
+            elif "set" in command or "set alarm" in command or "set alaram" in command:
                 # from setTimer
-                talk("for how long do you want to set Timer")
-                from setTimer import settime,take_command_for_setTimer
-                command = take_command_for_setTimer()
-                if command:
-                    settime(time)
+                from Alarm import setAlarm
+                setAlarm()
             elif "read pdf" in command or "pdf" in command or "text" in command or "file" in command or "read" in command:
                 from Pdfreader import takeCommandForPdf
                 talk("i will read for you. just Name the File you want to read")
@@ -120,15 +153,41 @@ def run_alexa():
                     reader(file_path)
                 else:
                     talk("i could not able to listen file name")
+            elif "volume up" in command or "increase volume" in command:
+                from Volume import volumeup
+                volumeup()
+                talk("volume increased")
+            elif "volume down" in command or "decrease volume" in command:
+                from Volume import volumedown
+                volumedown()
+                talk("volume decreased")
+            elif "pause" in command or "stop" in command:
+                pyautogui.press("k")
+                talk("vedio paused")
+            elif "play" in command:
+                pyautogui.press("k")
+                talk("vedio played")
+            elif "mute" in command:
+                pyautogui.press("m")
+                talk("vedio muted")
+            elif "unmute" in command:
+                pyautogui.press("m")
+                talk("vedio unmuted")
+            elif "shutdown" in command:
+                os.system("shutdown /s /t 3")
+            elif "translate" in command:
+                from Translate import translate
+                translate()
             else:
                 print("this functionality yet not added")
+            
         except Exception as e:
             print(e)
     else:
         print("I didn't catch that! Please try again!!")
-        talk("I didn't catch that! Please try again!!")
+        # talk("I didn't catch that! Please try again!!")
         print("Please repeat the command.")
-        talk("Please repeat the command.")
-    
+        # talk(kk"Please repeat the command.")
+        
 while True:
     run_alexa()

@@ -28,3 +28,15 @@ engine.runAndWait(): Processes the commands and speaks the text.
 %M: Minutes (e.g., 45).
 %S: Seconds (e.g., 30).
 %p: AM/PM.
+
+# whatsapp web
+yt.sendwhatmsg(phone_number, message, 0, 20)
+
+# # Open WhatsApp Desktop (Windows Run Command)
+                    # os.system("start whatsapp://send?phone=" + phone_number)
+
+                    # # Type the message
+                    # pyautogui.write(message)
+
+                    # # Press 'Enter' to send
+                    # pyautogui.press("enter")
