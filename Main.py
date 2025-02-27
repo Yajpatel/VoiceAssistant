@@ -8,8 +8,8 @@ from Pdfreader import reader
 
 import os
 import pyautogui #for play pause mute   
-# import requests
-# from bs4 import BeautifulSoup
+
+import asyncio
 
 #####3 Recognizer is a class which captures the audio 
 listener = sr.Recognizer()
@@ -39,7 +39,7 @@ def take_command():
                 engine.runAndWait()
                 first_run = False
 
-            print("Say Anything........")
+            print("Say Anything........") 
 
             # listen is a method of recognizer class which is used to capture audio
             ####### it captures audio until it detect silence or until provided time
@@ -177,14 +177,14 @@ def run_alexa():
                 os.system("shutdown /s /t 3")
             elif "translate" in command:
                 from Translate import translate
-                translate()
+                asyncio.run(translate()) 
             else:
                 print("this functionality yet not added")
             
         except Exception as e:
             print(e)
     else:
-        print("I didn't catch that! Please try again!!")
+        print("I didn't catch that! Please try again!!") 
         # talk("I didn't catch that! Please try again!!")
         print("Please repeat the command.")
         # talk(kk"Please repeat the command.")
