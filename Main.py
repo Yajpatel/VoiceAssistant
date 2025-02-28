@@ -29,6 +29,7 @@ def talk(msg):
     engine.say(msg)
     engine.runAndWait()
     
+
 def take_command():
     global first_run
     try:
@@ -66,8 +67,9 @@ def run_alexa():
                 talk("I am Personal Voice Assistant coded by Yaj")
                 print("I am Personal Voice Assistant coded by Yaj")
             elif "what is your gender" in command or "are you male or female" in command:
-                pass
-            elif "open" in command:
+                talk("I am just a virtual assistant, so I don't have a gender. But you can call me whatever you like!")
+                print("I am just a virtual assistant, so I don't have a gender. But you can call me whatever you like!")
+            elif "open" in command or "launch":
                 command = command.replace('open', "").strip()
                 pyautogui.press('super')
                 time.sleep(1)
@@ -81,7 +83,6 @@ def run_alexa():
                 command = command.replace(' on ', "").strip()
                 talk("Searching for..." + command)
                 yt.playonyt(command)
-                
                 
                 # input("press Enter to continue..")
             elif "google" in command:
@@ -145,8 +146,8 @@ def run_alexa():
                 from Pdfreader import takeCommandForPdf
                 talk("i will read for you. just Name the File you want to read")
                 filename = takeCommandForPdf()
-                filename = filename.replace(" dot", ".")   # Edge case for "dot" at the end
-                filename = "".join(filename.split())  # Remove spaces
+                # filename = filename.replace(" dot", ".")   # Edge case for "dot" at the end
+                # filename = "".join(filename.split())  # Remove spaces
                 # filename = "demo.txt"
                 if filename:
                     file_path = f"VoiceAssistant\{filename}"
@@ -178,6 +179,9 @@ def run_alexa():
             elif "translate" in command:
                 from Translate import translate
                 asyncio.run(translate()) 
+            elif "screenshot" in command:
+                image = pyautogui.screenshot()
+                image.save("ss.png")
             else:
                 print("this functionality yet not added")
             
@@ -191,3 +195,5 @@ def run_alexa():
         
 while True:
     run_alexa()
+    
+    
